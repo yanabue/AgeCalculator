@@ -20,6 +20,7 @@ const daysResultSpan = document.getElementById("daysresult");
 button.onclick = proccessDate;
 
 let errorState = false;
+let secondErrorState = false;
 
 function proccessDate() {
   const dayValue = dayBox.value;
@@ -31,12 +32,14 @@ function proccessDate() {
 
 function checkErrors(day, month, year) {
   resetErrors();
+  
 
   if (
     !(day >= 1 && day <= 31 && parseFloat(day) === Math.floor(parseFloat(day)))
   ) {
+    secondErrorState = true;
     if (
-      day < 0 ||
+      day <= 0 ||
       day > 31 ||
       parseFloat(day) !== Math.floor(parseFloat(day))
     ) {
@@ -52,8 +55,9 @@ function checkErrors(day, month, year) {
       month >= 1 &&
       month <= 12 &&
       parseFloat(month) === Math.floor(parseFloat(month))
-    )
+    ) 
   ) {
+    secondErrorState = true;
     if (
       month < 1 ||
       month > 12 ||
@@ -66,11 +70,12 @@ function checkErrors(day, month, year) {
     }
   }
 
-  if (year === "" || parseFloat(year) !== Math.floor(parseFloat(year))) {
+  if (year === "" || parseFloat(year) !== Math.floor(parseFloat(year)) || year < 0) {
+    secondErrorState = true;
     if (year === "") {
       handleError(yearBox, yearsSpan, yearsError, "This field is required");
     }
-    if (parseFloat(year) !== Math.floor(parseFloat(year))) {
+    if (year !== "" && parseFloat(year) !== Math.floor(parseFloat(year)) || year < 0) {
       handleError(yearBox, yearsSpan, yearsError, "Must be a valid year");
     }
   }
@@ -79,21 +84,27 @@ function checkErrors(day, month, year) {
   let inputDateString = `${year}-${month}-${day}`;
   let inputDate = new Date(inputDateString);
 
-  if (currentDate < inputDate) {
+  if (inputDate > currentDate) {
+    secondErrorState = true;
     handleError(yearBox, yearsSpan, yearsError, "Must be in the past");
     handleError(monthBox, monthsSpan, monthsError, "");
     handleError(dayBox, daysSpan, daysError, "");
   }
+
+  isDateValid(year,month,day,currentDate,inputDate);
+}
+
+function isDateValid(year,month,day,currentDate,inputDate){
   if (
     inputDate.getFullYear() !== year &&
     inputDate.getMonth() !== month - 1 &&
-    inputDate.getDate() !== day
+    inputDate.getDate() !== day && !secondErrorState 
   ) {
-    handleError(yearBox, yearsSpan, yearsError, "Enter a valid date");
-    handleError(monthBox, monthsSpan, monthsError, "");
-    handleError(dayBox, daysSpan, daysError, "");
+    handleError(dayBox, daysSpan, daysError, "Enter a valid date");
+    handleError(monthBox, monthsSpan,monthsError, "");
+    handleError(yearBox, yearsSpan,yearsError, "");
   }
-  console.log(inputDate.getFullYear(), inputDate.getMonth(), inputDate.getDate())
+
   calculateAge(currentDate, inputDate);
 }
 
@@ -119,12 +130,12 @@ function resetErrors() {
   yearsError.innerText = "";
   
   errorState = false;
+  secondErrorState = false;
 }
 
 function calculateAge(today, input) {
   if (!errorState) {
-    console.log("the input date is error free");
-  
+
     let yearDifference = today.getFullYear() - input.getFullYear();
     let monthDifference = today.getMonth() - input.getMonth();
     let dayDifference = today.getDate()- input.getDate();
@@ -142,7 +153,5 @@ yearsResultSpan.innerText = yearDifference;
 monthsResultSpan.innerText = monthDifference;
 daysResultSpan.innerText = dayDifference;
 
-  } else if (errorState){
-    console.log("the input date has errors");
   }
 }
