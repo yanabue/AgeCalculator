@@ -16,9 +16,8 @@ body {
   background-color: hsl(0, 0%, 94%);
 }
 
-.main {
-  width: 75%;
-  max-width: 500px;
+main {
+  width: 500px;
   height: 350px;
   display: flex;
   flex-direction: column;
@@ -95,13 +94,13 @@ button:active {
   color: hsl(259, 100%, 65%);
 }
 
-@media (max-width: 420px) {
+@media (max-width: 440px) {
   body {
     display: block;
   }
-  .main {
-    width: 90%;
-    height: 50vh;
+  main {
+    width: 400px;
+    height: 450px;
     margin: 130px auto;
   }
   button {
