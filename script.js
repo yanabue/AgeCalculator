@@ -146,7 +146,7 @@ if (monthDifference < 0){
 }
 if (dayDifference < 0){
     monthDifference--;
-    dayDifference = 30.44 + dayDifference;
+    dayDifference = 30 + dayDifference;
 }
 
 yearsResultSpan.innerText = yearDifference;
