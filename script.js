@@ -145,7 +145,7 @@ if (monthDifference < 0){
     monthDifference = 12 + monthDifference;
 }
 if (dayDifference < 0){
-    monthDifference--;
+    monthDifference--;  
     dayDifference = 30 + dayDifference;
 }
 
